@@ -1,0 +1,58 @@
+﻿@model FUnewsDTO.CategoryDTO
+
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Edit Category</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <input type="hidden" asp-for="CategoryId" />
+
+                        <div class="mb-3">
+                            <label asp-for="CategoryName" class="form-label"></label>
+                            <input asp-for="CategoryName" class="form-control" />
+                            <span asp-validation-for="CategoryName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CategoryDesciption" class="form-label"></label>
+                            <textarea asp-for="CategoryDesciption" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="CategoryDesciption" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ParentCategoryId" class="form-label"></label>
+                            <select asp-for="ParentCategoryId" class="form-select" asp-items="ViewBag.ParentCategories">
+                                <option value="">-- Select Parent Category --</option>
+                            </select>
+                            <span asp-validation-for="ParentCategoryId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" asp-for="IsActive" />
+                            <label class="form-check-label" asp-for="IsActive"></label>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

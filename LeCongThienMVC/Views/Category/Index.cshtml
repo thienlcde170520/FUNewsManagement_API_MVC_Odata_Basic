@@ -1,0 +1,74 @@
+﻿@model IEnumerable<FUnewsDTO.CategoryDTO>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-primary"><i class="fas fa-folder"></i> @ViewData["Title"]</h2>
+
+    <div class="mb-3 text-end">
+        <a asp-action="Create" class="btn btn-success d-inline-flex align-items-center shadow-sm">
+            <i class="bi bi-plus-circle me-1"></i> Create New
+        </a>
+    </div>
+
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover shadow-sm rounded">
+            <thead class="table-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.First().CategoryName)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().CategoryDesciption)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().IsActive)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().ParentCategory)</th>
+                    <th style="width: 160px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.CategoryName</td>
+                        <td>@item.CategoryDesciption</td>
+                        <td>
+                            <span class="badge @(item.IsActive ? "bg-success" : "bg-secondary")">
+                                @(item.IsActive ? "Active" : "Inactive")
+                            </span>
+                        </td>
+                        <td>@item.ParentCategoryName</td>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@item.CategoryId" class="btn btn-sm btn-outline-primary me-1 shadow-sm d-inline-flex align-items-center">
+                                <i class="bi bi-pencil-square me-1"></i> Edit
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.CategoryId" class="btn btn-sm btn-outline-danger shadow-sm d-inline-flex align-items-center"
+                               >
+                                <i class="bi bi-trash me-1"></i> Delete
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .btn i {
+            margin-right: 4px;
+        }
+
+        .badge {
+            font-size: 0.85rem;
+            padding: 0.4em 0.6em;
+        }
+    </style>
+}

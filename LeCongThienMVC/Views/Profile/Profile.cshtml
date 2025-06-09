@@ -1,0 +1,32 @@
+﻿@model LeCongThienMVC.Models.SystemAccount
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if (Model != null)
+{
+    <table class="table">
+        <tr>
+            <th>Account Name</th>
+            <td>@Html.DisplayFor(model => model.AccountName)</td>
+        </tr>
+        <tr>
+            <th>Account Email</th>
+            <td>@Html.DisplayFor(model => model.AccountEmail)</td>
+        </tr>
+        <tr>
+            <th>Account Password</th>
+            <td>@Html.DisplayFor(model => model.AccountPassword)</td>
+        </tr>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <tr>
+                <td colspan="2">
+                    <a asp-action="Edit" asp-route-id="@Model.AccountId">Edit</a>
+                    <a asp-action="History" asp-route-id="@Model.AccountId">History</a>
+                </td>
+            </tr>
+        }
+    </table>
+}

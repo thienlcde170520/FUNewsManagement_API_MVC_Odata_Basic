@@ -1,0 +1,55 @@
+﻿@model FUnewsDTO.LoginRequestDTO
+
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 400px;">
+        <h3 class="text-center mb-4 fw-bold">Login</h3>
+
+        <form asp-action="Login" method="post" novalidate>
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger py-2" role="alert" style="font-size: 0.9rem;">@ViewBag.ErrorMessage</div>
+            }
+            
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3 position-relative">
+                <label asp-for="Password" class="form-label"></label>
+                <div class="input-group">
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" id="passwordInput" />
+                    <button type="button" class="btn btn-outline-secondary" onclick="togglePassword()" tabindex="-1">
+                        <i id="toggleIcon" class="bi bi-eye"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary w-100 fw-semibold">Login</button>
+        </form>
+    </div>
+</div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+@section Scripts {
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById("passwordInput");
+            const toggleIcon = document.getElementById("toggleIcon");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("bi-eye");
+                toggleIcon.classList.add("bi-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("bi-eye-slash");
+                toggleIcon.classList.add("bi-eye");
+            }
+        }
+    </script>
+}

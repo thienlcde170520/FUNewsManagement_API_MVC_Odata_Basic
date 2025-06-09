@@ -1,0 +1,125 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - LeCongThienMVC</title>
+
+    <!-- Icons & Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MyMvcApp.styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    FU News Management
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    @{
+                        var user = HttpContextAccessor.HttpContext?.User;
+                        bool isLoggedIn = user?.Identity != null && user.Identity.IsAuthenticated;
+                        bool isAdmin = user?.IsInRole("Admin") ?? false;
+                        bool isStaff = user?.IsInRole("Staff") ?? false;
+                    }
+
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+
+                        @if (isAdmin)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" asp-controller="SystemAccounts" asp-action="Index">
+                                    <i class="fas fa-users-cog me-2"></i> Manage Accounts
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" asp-controller="Report" asp-action="Report">
+                                    <i class="fas fa-chart-line me-2"></i> Reports
+                                </a>
+                            </li>
+                        }
+
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" asp-controller="NewsArticle" asp-action="Index">
+                                <i class="fas fa-newspaper me-2"></i> News Articles
+                            </a>
+                        </li>
+
+                        @if (isStaff)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" asp-controller="Category" asp-action="Index">
+                                    <i class="bi bi-ui-checks-grid me-2"></i> Category
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" asp-controller="NewsArticle" asp-action="MyNews">
+                                    <i class="fas fa-pen me-2"></i> My Articles
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav d-flex align-items-center">
+                        @if (!isLoggedIn)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold" asp-controller="Auth" asp-action="Login">Login</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-semibold" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Hello, @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form asp-controller="Auth" asp-action="Logout" method="post" class="px-3">
+                                            <button type="submit" class="btn btn-danger btn-sm w-100">Logout</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mt-4 pb-5">
+        @RenderBody()
+    </main>
+
+    <footer class="bg-light border-top py-3 text-center text-muted mt-auto">
+        <div class="container">
+            &copy; 2025 - LeCongThienMVC - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

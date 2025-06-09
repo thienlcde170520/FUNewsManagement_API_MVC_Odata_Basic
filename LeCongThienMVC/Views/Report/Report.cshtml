@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Generate Report";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Generate Report</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Report" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="mb-3">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <input id="startDate" name="startDate" type="date" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="endDate" class="form-label">End Date</label>
+                            <input id="endDate" name="endDate" type="date" class="form-control" required />
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">Generate Report</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

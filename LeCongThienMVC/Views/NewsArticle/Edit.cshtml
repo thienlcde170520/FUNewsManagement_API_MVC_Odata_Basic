@@ -1,0 +1,94 @@
+﻿@model FUnewsDTO.NewsArticleDTO
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Edit News Article</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <input type="hidden" asp-for="NewsArticleId" />
+
+                        <div class="mb-3">
+                            <label asp-for="NewsTitle" class="form-label"></label>
+                            <input asp-for="NewsTitle" class="form-control" />
+                            <span asp-validation-for="NewsTitle" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Headline" class="form-label"></label>
+                            <input asp-for="Headline" class="form-control" />
+                            <span asp-validation-for="Headline" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CreatedDate" class="form-label"></label>
+                            <input asp-for="CreatedDate" class="form-control" />
+                            <span asp-validation-for="CreatedDate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NewsContent" class="form-label"></label>
+                            <textarea asp-for="NewsContent" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="NewsContent" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NewsSource" class="form-label"></label>
+                            <input asp-for="NewsSource" class="form-control" />
+                            <span asp-validation-for="NewsSource" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CategoryId" class="form-label"></label>
+                            <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId"></select>
+                            <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" asp-for="NewsStatus" />
+                            <label class="form-check-label" for="NewsStatus">
+                                @Html.DisplayNameFor(model => model.NewsStatus)
+                            </label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CreatedById" class="form-label"></label>
+                            <select asp-for="CreatedById" class="form-select" asp-items="ViewBag.CreatedById"></select>
+                            <span asp-validation-for="CreatedById" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="UpdatedById" class="form-label"></label>
+                            <select asp-for="UpdatedById" class="form-select" asp-items="ViewBag.UpdatedById"></select>
+                            <span asp-validation-for="UpdatedById" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ModifiedDate" class="form-label"></label>
+                            <input asp-for="ModifiedDate" class="form-control" readonly />
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

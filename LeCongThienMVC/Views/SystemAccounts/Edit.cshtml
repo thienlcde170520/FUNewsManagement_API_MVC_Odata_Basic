@@ -1,0 +1,54 @@
+﻿@model FUnewsDTO.SystemAccountDTO
+
+@{
+    ViewData["Title"] = "Edit Account";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Edit Account</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <input type="hidden" asp-for="AccountId" />
+
+                        <div class="mb-3">
+                            <label asp-for="AccountName" class="form-label"></label>
+                            <input asp-for="AccountName" class="form-control" />
+                            <span asp-validation-for="AccountName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="AccountEmail" class="form-label"></label>
+                            <input asp-for="AccountEmail" class="form-control" />
+                            <span asp-validation-for="AccountEmail" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="AccountRole" class="form-label"></label>
+                            <select asp-for="AccountRole" class="form-select">
+                                <option value="">-- Select Role --</option>
+                                <option value="1" selected="@((Model.AccountRole == 1).ToString().ToLower())">Staff</option>
+                                <option value="2" selected="@((Model.AccountRole == 2).ToString().ToLower())">Lecture</option>
+                            </select>
+                            <span asp-validation-for="AccountRole" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

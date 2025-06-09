@@ -1,0 +1,40 @@
+﻿@model IEnumerable<LeCongThienMVC.Models.NewsArticle>
+
+@{
+    ViewData["Title"] = "History";
+}
+
+<h2>News History</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>News Title</th>
+            <th>Create Date</th>
+            <th>NewsSource</th>
+            <th>NewsStatus</th>
+            <th>Detail</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.NewsTitle</td>
+                <td>@item.CreatedDate?.ToString("dd/MM/yyyy")</td>
+                <td>@item.NewsSource</td>
+                <td>@(item.NewsStatus)</td>
+                <td>
+                    <a asp-controller="NewsArticles" asp-action="Details" asp-route-id="@item.NewsArticleId" class="btn btn-info">Detail</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
