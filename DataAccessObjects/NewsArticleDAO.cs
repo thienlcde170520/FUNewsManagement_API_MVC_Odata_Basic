@@ -17,9 +17,20 @@ namespace DataAccessObjects
                 .Include(n => n.Tags)
                 .Include(n => n.Category)
                 .Include(n => n.CreatedBy)
-                //.Include(f => f.Category)
-                //.Include(a => a.NewsTags)
-                //.ThenInclude(nt => nt.Tag)
+                //.OrderByDescending(n => n.Category) // Sắp xếp theo ngày tạo mới nhất
+                                                       //.Include(f => f.Category)
+                                                       //.Include(a => a.NewsTags)
+                                                       //.ThenInclude(nt => nt.Tag)
+                .ToListAsync();
+        }
+
+        public async Task<List<NewsArticle>> GetAllActiveAsync()
+        {
+            return await _context.NewsArticles
+                .Include(n => n.Tags)
+                .Include(n => n.Category)
+                .Include(n => n.CreatedBy)
+                .Where(n => n.NewsStatus == false) 
                 .ToListAsync();
         }
 
@@ -37,9 +48,23 @@ namespace DataAccessObjects
                 .FirstOrDefaultAsync(n => n.NewsArticleId.Equals(id));
         }
 
-        public async Task AddAsync(NewsArticle entity)
+        public async Task AddAsync(NewsArticle entity, List<int>? tagIds = null)
         {
             _context.NewsArticles.Add(entity);
+
+            // Handle tags nếu có
+            if (tagIds != null && tagIds.Any())
+            {
+                var tags = await _context.Tags
+                    .Where(t => tagIds.Contains(t.TagId))
+                    .ToListAsync();
+
+                foreach (var tag in tags)
+                {
+                    entity.Tags.Add(tag);
+                }
+            }
+
             await _context.SaveChangesAsync();
         }
 

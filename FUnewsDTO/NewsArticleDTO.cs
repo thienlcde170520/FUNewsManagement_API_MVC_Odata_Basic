@@ -52,5 +52,8 @@ namespace FUnewsDTO
         public SystemAccountDTO? UpdatedBy { get; set; }
 
         public List<TagDTO>? Tags { get; set; }
+
+        public List<int>? SelectedTagIds { get; set; } = new List<int>();
+
     }
 }

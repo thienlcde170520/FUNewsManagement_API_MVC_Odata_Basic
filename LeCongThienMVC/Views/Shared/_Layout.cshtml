@@ -14,7 +14,34 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MyMvcApp.styles.css" asp-append-version="true" />
+    <style>
+        /* Dropdown mở khi hover */
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+            margin-top: 0;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        /* Mượt mà hơn khi hiện */
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Ẩn caret ▼ */
+        .nav-link.dropdown-toggle::after {
+            display: none !important;
+        }
+    </style>
     @await RenderSectionAsync("Styles", required: false)
+
+    
 </head>
 <body>
     <header>
@@ -44,32 +71,57 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center" asp-controller="SystemAccounts" asp-action="Index">
-                                    <i class="fas fa-users-cog me-2"></i> Manage Accounts
+                                     Manage Accounts
                                 </a>
-                            </li>
+                            </li>                            
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" asp-controller="Report" asp-action="Report">
-                                    <i class="fas fa-chart-line me-2"></i> Reports
+                                <a class="nav-link d-flex align-items-center" asp-controller="Category" asp-action="Index">
+                                    Category
                                 </a>
                             </li>
                         }
 
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center" asp-controller="NewsArticle" asp-action="Index">
-                                <i class="fas fa-newspaper me-2"></i> News Articles
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="newsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                News
                             </a>
+                            <ul class="dropdown-menu" aria-labelledby="newsDropdown">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="NewsArticle" asp-action="Index">All News Articles</a>
+                                </li>
+
+                                @if (isAdmin)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Report" asp-action="Report">Reports</a>
+                                    </li>
+                                }
+
+                                @if (isStaff)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="NewsArticle" asp-action="MyNews">My Articles</a>
+                                    </li>
+                                }
+                            </ul>
                         </li>
+
+                        @* <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" asp-controller="NewsArticle" asp-action="Index">
+                                 News Articles
+                            </a>
+                        </li> *@
 
                         @if (isStaff)
                         {
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center" asp-controller="Category" asp-action="Index">
-                                    <i class="bi bi-ui-checks-grid me-2"></i> Category
+                                     Category
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center" asp-controller="NewsArticle" asp-action="MyNews">
-                                    <i class="fas fa-pen me-2"></i> My Articles
+                                     My Articles
                                 </a>
                             </li>
                         }
@@ -120,6 +172,16 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Ngăn dropdown tự toggle khi click (đã xử lý bằng hover)
+        document.querySelectorAll('.nav-item.dropdown > a').forEach(function (el) {
+            el.addEventListener('click', function (e) {
+                e.preventDefault(); // Ngăn click gây toggle
+            });
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

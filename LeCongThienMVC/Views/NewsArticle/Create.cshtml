@@ -47,9 +47,9 @@
                 @*tags*@
                 <div class="mb-3">
                     <label class="form-label">Tags</label>
-                    <select asp-for="Tags" asp-items="ViewBag.TagList" class="form-select" multiple>
+                    <select asp-for="SelectedTagIds" asp-items="ViewBag.TagList" class="form-select" multiple>
                     </select>
-                    <span asp-validation-for="Tags" class="text-danger"></span>
+                    <span asp-validation-for="SelectedTagIds" class="text-danger"></span>
                 </div>
 
 

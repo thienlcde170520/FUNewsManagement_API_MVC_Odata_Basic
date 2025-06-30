@@ -1,0 +1,65 @@
+﻿@model IEnumerable<FUnewsDTO.NewsArticleDTO>
+
+@{
+    ViewData["Title"] = "Admin Manage News";
+    bool isStaff = User.IsInRole("Staff");
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+        <h2 class="fw-semibold text-primary"><i class="bi bi-newspaper me-2"></i>News Articles</h2>
+
+        
+    </div>    
+
+    <div class="table-responsive rounded shadow-sm">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" class="fw-semibold">📌 Title</th>
+                    <th scope="col" class="fw-semibold">📅 Created Date</th>
+                    <th scope="col" class="fw-semibold">🏷️ Tags</th>
+                    <th scope="col" class="fw-semibold text-center">⚙️ Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">No news articles found.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.NewsTitle</td>
+                            <td>@item.CreatedDate.ToString()</td>
+                            <td>
+                                @if (item.Tags != null && item.Tags.Any())
+                                {
+                                    @foreach (var tag in item.Tags)
+                                    {
+                                        <span class="badge rounded-pill bg-secondary-subtle text-dark me-1">@tag.TagName</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No Tags</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Approve" asp-route-id="@item.NewsArticleId" class="btn btn-sm btn-outline-info">
+                                    <i class="bi bi-info-circle"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    
+</div>

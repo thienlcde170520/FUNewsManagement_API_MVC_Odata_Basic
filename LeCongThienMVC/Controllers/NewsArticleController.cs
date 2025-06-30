@@ -34,20 +34,24 @@ namespace LeCongThienMVC.Controllers
             _httpClient = factory.CreateClient("ODataAPI");
         }
 
-        public async Task<IActionResult> Index(string searchTerm = "", string sortField = "NewsTitle", 
+        public async Task<IActionResult> Index(string searchTerm = "", string sortField = "CreatedDate", string sortDirection = "asc",
             int pageNumber = 1, int pageSize = 4)
         {
-            int skip = (pageNumber - 1) * pageSize;
+
+            //string sortDirection = "desc"
+            int skip = (pageNumber - 1) * pageSize;          
 
             string filterQuery = string.IsNullOrEmpty(searchTerm)
                 ? ""
                 : $"$filter=contains(NewsTitle,'{searchTerm}')&";
 
-            //string orderByQuery = $"$orderby={sortField} {sortDirection}&";
+            //string sortFields = "CategoryId";
+
+            string orderByQuery = $"$orderby={sortField} {sortDirection}&";
 
             string pagingQuery = $"$skip={skip}&$top={pageSize}&$count=true";
-
-            string query = $"/odata/newsArticles?{filterQuery}{pagingQuery}";
+            //add filter and order, paging to query
+            string query = $"/odata/newsArticles?{filterQuery}{orderByQuery}{pagingQuery}";
 
             var response = await _httpClient.GetAsync(query);
             Console.WriteLine("Status Code: " + response.StatusCode);
@@ -189,7 +193,17 @@ namespace LeCongThienMVC.Controllers
             await _newsArticleService.Update(dto);
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        public async Task<IActionResult> Approve(string id, NewsArticleDTO dto)
+        {
+            if (id != dto.NewsArticleId) return BadRequest();
+            if (!ModelState.IsValid) return View(dto);
 
+            dto.ModifiedDate = DateTime.Now;
+            dto.NewsStatus = true;
+            await _newsArticleService.Update(dto);
+            return RedirectToAction(nameof(Index));
+        }
         public async Task<IActionResult> Delete(string id)
         {
             var article = await _newsArticleService.GetNewsArticleById(id);
@@ -246,6 +260,12 @@ namespace LeCongThienMVC.Controllers
         {
             var myArticles = await _newsArticleService.GetNewsArticlesByAuthor();
             return View(myArticles);
+        }
+
+        public async Task<IActionResult> AdminManageNews()
+        {
+            var allArticles = await _newsArticleService.GetNewsArticlesActiveAsync();
+            return View(allArticles);
         }
     }
 }

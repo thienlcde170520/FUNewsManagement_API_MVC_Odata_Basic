@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Xác thực hai yếu tố";
+}
+
+<h2>Xác thực hai yếu tố</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div class="form-group">
+                <label for="code">Nhập mã xác thực từ ứng dụng:</label>
+                <input type="text" id="code" name="code" class="form-control" autocomplete="off" />
+                <input type="hidden" name="email" value="@ViewData["Email"]" />
+                <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+            </div>
+            <button type="submit" class="btn btn-primary">Xác nhận</button>
+        </form>
+    </div>
+</div>

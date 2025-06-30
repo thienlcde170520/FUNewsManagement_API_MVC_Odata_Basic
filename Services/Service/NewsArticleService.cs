@@ -52,5 +52,10 @@ namespace Services.Service
         {
             return await _httpClient.GetFromJsonAsync<IEnumerable<NewsArticleDTO>>($"NewsArticle/MyArticles");
         }
+
+        public async Task<IEnumerable<NewsArticleDTO>> GetNewsArticlesActiveAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<IEnumerable<NewsArticleDTO>>("NewsArticle/AdninStatus");
+        }
     }
 }

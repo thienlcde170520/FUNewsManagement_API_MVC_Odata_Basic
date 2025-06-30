@@ -1,0 +1,12 @@
+﻿<form asp-action="VerifyMfa" method="post">
+    <input type="hidden" name="Email" value="@TempData["Email"]" />
+    <div class="form-group">
+        <label>Mã xác thực</label>
+        <input name="Code" class="form-control" placeholder="Nhập mã MFA" required />
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Xác nhận</button>
+</form>
+@if (ViewBag.Error != null)
+{
+    <div class="text-danger">@ViewBag.Error</div>
+}

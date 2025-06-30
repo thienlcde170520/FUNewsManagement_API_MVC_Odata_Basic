@@ -11,9 +11,9 @@ namespace Repositories.Repository
 {
     public class NewsArticleRepository : INewsArticleRepository
     {
-        public async Task Add(NewsArticle news)
+        public async Task Add(NewsArticle news, List<int>? tagIds = null)
         {
-            await NewsArticleDAO.Instance.AddAsync(news);
+            await NewsArticleDAO.Instance.AddAsync(news, tagIds);
         }
 
         public async Task Delete(string id)
@@ -38,6 +38,11 @@ namespace Repositories.Repository
         public async Task<IEnumerable<NewsArticle>> GetByAuthor(short authorId)
         {
             return await NewsArticleDAO.Instance.GetByAuthorAsync(authorId);
+        }
+
+        public async Task<IEnumerable<NewsArticle>> GetAllActiveAsync()
+        {
+           return await NewsArticleDAO.Instance.GetAllActiveAsync();
         }
     }
 }

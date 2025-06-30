@@ -1,4 +1,4 @@
-
+﻿
 using FUnewsDTO;
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.Edm;
@@ -19,12 +19,16 @@ namespace ODataAPI
             static IEdmModel GetEdmModel()
             {
                 var builder = new ODataConventionModelBuilder(); 
+                //newsArticles
                 var newsArticles = builder.EntitySet<NewsArticleDTO>("newsArticles");
                 newsArticles.EntityType.HasKey(x => x.NewsArticleId);
+                //systemAccount
                 var systemAccount = builder.EntitySet<SystemAccountDTO>("systemAccount");
                 systemAccount.EntityType.HasKey(x => x.AccountId);
+                //category
                 var category = builder.EntitySet<CategoryDTO>("category");
                 category.EntityType.HasKey(x => x.CategoryId);
+
                 return builder.GetEdmModel();
             }
 
@@ -38,7 +42,7 @@ namespace ODataAPI
                     .OrderBy()
                     .Count()
                     .Expand()
-                    .SetMaxTop(100); ;
+                    .SetMaxTop(100);
             });
 
             var apiBaseAddress = "https://localhost:7050/api/";

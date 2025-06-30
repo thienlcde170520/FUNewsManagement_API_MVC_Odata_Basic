@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using Configurations;
 using FUnewsDTO;
+using FunewsWebAPI.mfa;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using OtpNet;
+using Repositories.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Repositories.Interfaces;
 
 namespace FunewsWebAPI.Controllers
 {
@@ -32,51 +34,60 @@ namespace FunewsWebAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginDto)
         {
-            BusinessObjects.Models.SystemAccount? user = await _repo.GetByEmail(loginDto.Email);
-            string roleName = "";
-
-            if (user == null)
+            try
             {
-                // Tài khoản mặc định Admin từ appsettings.json
-                if (loginDto.Email == _adminOptions.Email && loginDto.Password == _adminOptions.Password)
+                BusinessObjects.Models.SystemAccount? user = await _repo.GetByEmail(loginDto.Email);
+                string roleName = "";
+
+                if (user == null)
                 {
-                    user = new BusinessObjects.Models.SystemAccount
+                    // Tài khoản mặc định Admin từ appsettings.json
+                    if (loginDto.Email == _adminOptions.Email && loginDto.Password == _adminOptions.Password)
                     {
-                        AccountEmail = _adminOptions.Email,
-                        AccountName = "System Admin",
-                        AccountRole = 0
-                    };
-                    roleName = "Admin";
+                        user = new BusinessObjects.Models.SystemAccount
+                        {
+                            AccountEmail = _adminOptions.Email,
+                            AccountName = "System Admin",
+                            AccountRole = 0
+                        };
+                        roleName = "Admin";
+                    }
+                    else
+                    {
+                        return Unauthorized("Invalid credentials");
+                    }
                 }
                 else
                 {
-                    return Unauthorized("Invalid credentials");
-                }
-            }
-            else
-            {
-                // Có user trong DB, kiểm tra password
-                if (user.AccountPassword != loginDto.Password)
-                {
-                    return Unauthorized("Invalid password");
+                    // Có user trong DB, kiểm tra password
+                    if (user.AccountPassword != loginDto.Password)
+                    {
+                        return Unauthorized("Invalid password");
+                    }
+
+                    roleName = user.AccountRole switch
+                    {
+                        1 => "Staff",
+                        2 => "Lecturer",
+                        _ => "Unknown"
+                    };
                 }
 
-                roleName = user.AccountRole switch
+                var token = GenerateToken(user, roleName);
+
+                var response = new LoginResponseDTO
                 {
-                    1 => "Staff",
-                    2 => "Lecturer",
-                    _ => "Unknown"
+                    Token = token
                 };
+                return Ok(response);
+                
             }
-
-            var token = GenerateToken(user, roleName);
-
-            var response = new LoginResponseDTO
+            catch (Exception ex)
             {
-                Token = token
-            };
-
-            return Ok(response);
+                // Xử lý lỗi
+                Console.WriteLine("Lỗi: " + ex.Message);
+                return BadRequest("Đã xảy ra lỗi trong quá trình xử lý đăng nhập.");
+            }
         }
 
         private string GenerateToken(BusinessObjects.Models.SystemAccount user, string roleName)
@@ -102,5 +113,9 @@ namespace FunewsWebAPI.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+
+
     }
+
 }

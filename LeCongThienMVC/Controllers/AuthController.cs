@@ -1,20 +1,24 @@
 ﻿using FUnewsDTO;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Services.Interfaces;
 using LeCongThienMVC.Utilities;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Services.Interfaces;
+using System.Net.Http;
+using System.Security.Claims;
 
 namespace LeCongThienMVC.Controllers
 {
     public class AuthController : Controller
     {
         private readonly ISystemAccountService _authService;
-
-        public AuthController(ISystemAccountService authService)
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
+        public AuthController(ISystemAccountService authService, IHttpClientFactory httpClientFactory, HttpClient httpClient)
         {
             _authService = authService;
+            _httpClientFactory = httpClientFactory;
+            _httpClient = httpClient;
         }
 
         [HttpGet]
@@ -53,7 +57,6 @@ namespace LeCongThienMVC.Controllers
 
             return Url.IsLocalUrl(returnUrl) ? Redirect(returnUrl!) : RedirectToAction("Index", "Home");
         }
-
         [HttpGet]
         public IActionResult AccessDenied() => View();
 

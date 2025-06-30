@@ -11,6 +11,7 @@ namespace Services.Interfaces
     public interface INewsArticleService
     {
         Task<IEnumerable<NewsArticleDTO>> GetNewsArticles();
+        Task<IEnumerable<NewsArticleDTO>> GetNewsArticlesActiveAsync();
         Task<NewsArticleDTO> GetNewsArticleById(string id);
         Task Create(NewsArticleDTO newsArticle);
         Task Update(NewsArticleDTO newsArticle);

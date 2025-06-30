@@ -22,11 +22,18 @@
         <input type="text" name="searchTerm" value="@ViewBag.CurrentSearch" class="form-control" placeholder="Search by title..." />
 
         <select name="sortField" class="form-select me-2" hidden>
-@*             <option value="CreatedDate" selected="@(ViewBag.CurrentSortField == "CreatedDate" ? "selected" : null)">Created Date</option>
- *@            <option value="NewsTitle" selected="@(ViewBag.CurrentSortField == "NewsTitle" ? "selected" : null)">Title</option>
+           <option value="CategoryId" selected="@(ViewBag.CurrentSortField == "CategoryId" ? "selected" : null)">Category</option>
+           <option value="NewsTitle" selected="@(ViewBag.CurrentSortField == "NewsTitle" ? "selected" : null)">Title</option>
+           <option value="CreatedDate" selected="@(ViewBag.CurrentSortField == "CreatedDate" ? "selected" : null)">Created Date</option>
         </select>
+      
 
-        
+         <select name="sortDirection" class="form-select me-2">
+            <option value="asc" selected="@(ViewBag.CurrentSortDirection == "asc" ? "selected" : null)">Asc</option>
+            <option value="desc" selected="@(ViewBag.CurrentSortDirection == "desc" ? "selected" : null)">Des</option>
+        </select> 
+
+
 
         <button type="submit" class="btn btn-primary">Search</button>
     </form>
@@ -37,6 +44,7 @@
                 <tr>
                     <th scope="col" class="fw-semibold">📌 Title</th>
                     <th scope="col" class="fw-semibold">📅 Created Date</th>
+                    <th scope="col" class="fw-semibold">📁 Category</th>
                     <th scope="col" class="fw-semibold">🏷️ Tags</th>
                     <th scope="col" class="fw-semibold text-center">⚙️ Actions</th>
                 </tr>
@@ -55,6 +63,7 @@
                         <tr>
                             <td>@item.NewsTitle</td>
                             <td>@item.CreatedDate.ToString()</td>
+                            <td>@item.CategoryName</td>
                             <td>
                                 @if (item.Tags != null && item.Tags.Any())
                                 {

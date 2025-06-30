@@ -17,16 +17,17 @@ namespace FunewsWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Staff")]
+    [Authorize(Roles = "Admin,Staff")]
     public class NewsArticleController : ControllerBase
     {
         private readonly INewsArticleRepository _newsRepo;
         private readonly IMapper _mapper;
-
-        public NewsArticleController(INewsArticleRepository newsRepo, IMapper mapper)
+        private readonly ITagRepository _tagRepo;
+        public NewsArticleController(INewsArticleRepository newsRepo, IMapper mapper, ITagRepository tagRepo)
         {
             _newsRepo = newsRepo;
             _mapper = mapper;
+            _tagRepo = tagRepo;
         }
 
         // Get all news (chỉ lấy news active hoặc theo yêu cầu)
@@ -54,7 +55,9 @@ namespace FunewsWebAPI.Controllers
         public async Task<IActionResult> Create(NewsArticleDTO dto)
         {
             var entity = _mapper.Map<NewsArticle>(dto);
-            await _newsRepo.Add(entity);
+
+            //await _newsRepo.Add(entity);
+            await _newsRepo.Add(entity, dto.SelectedTagIds);
             return Content("Insert success!");
         }
 
@@ -91,6 +94,14 @@ namespace FunewsWebAPI.Controllers
 
             var articles = await _newsRepo.GetByAuthor(userId);
             return Ok(articles);
+        }
+        [HttpGet("AdninStatus")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAdminStatus()
+        {
+            var news = await _newsRepo.GetAllActiveAsync();
+            var dtos = _mapper.Map<IEnumerable<NewsArticleDTO>>(news);
+            return Ok(dtos);
         }
     }
 }

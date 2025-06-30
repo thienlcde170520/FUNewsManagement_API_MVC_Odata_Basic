@@ -50,6 +50,7 @@ namespace FunewsWebAPI
             });
             // JWT Authentication
             var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -142,13 +143,13 @@ namespace FunewsWebAPI
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
+            app.UseRouting();   
 
             app.UseCors("AllowSpecificOrigin");
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+           
 
             app.MapControllers();
 

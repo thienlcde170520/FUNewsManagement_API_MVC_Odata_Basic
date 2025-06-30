@@ -15,5 +15,9 @@ public partial class SystemAccount
 
     public string? AccountPassword { get; set; }
 
+    public string? AuthenticatorKey { get; set; }
+
+    public bool? IsMfaEnabled { get; set; } = false;
+
     public virtual ICollection<NewsArticle> NewsArticles { get; set; } = new List<NewsArticle>();
 }

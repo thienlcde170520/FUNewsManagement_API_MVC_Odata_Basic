@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Drawing.Printing;
 
 namespace LeCongThienMVC.Controllers
 {
@@ -48,7 +49,7 @@ namespace LeCongThienMVC.Controllers
                 PageSize = pageSize,
                 TotalCount = totalCount
             };
-
+       
             return View("ReportResult", model);
         }
     }
